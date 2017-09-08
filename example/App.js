@@ -203,6 +203,8 @@ export default class Example extends React.Component {
         renderBubble={this.renderBubble}
         renderCustomView={this.renderCustomView}
         renderFooter={this.renderFooter}
+        renderAvatarsForSameUser
+        renderAvatarOnTop
       />
     );
   }

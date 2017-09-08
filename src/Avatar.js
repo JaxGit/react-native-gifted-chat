@@ -5,7 +5,7 @@ import GiftedAvatar from "./GiftedAvatar";
 import {isSameUser, isSameDay, warnDeprecated} from "./utils";
 
 export default class Avatar extends React.Component {
-  renderAvatar() {
+  renderAvatar(isVisible) {
     if (this.props.renderAvatar) {
       const {renderAvatar, ...avatarProps} = this.props;
       return this.props.renderAvatar(avatarProps);
@@ -13,7 +13,7 @@ export default class Avatar extends React.Component {
     return (
       <GiftedAvatar
         avatarStyle={StyleSheet.flatten([styles[this.props.position].image, this.props.imageStyle[this.props.position]])}
-        user={this.props.currentMessage.user}
+        user={isVisible ? this.props.currentMessage.user : undefined}
         onPress={() => this.props.onPressAvatar && this.props.onPressAvatar(this.props.currentMessage.user)}
       />
     );
@@ -28,20 +28,15 @@ export default class Avatar extends React.Component {
       return null
     }
 
+    let isVisible = true;
     if (isSameUser(this.props.currentMessage, messageToCompare) && isSameDay(this.props.currentMessage, messageToCompare)) {
-      return (
-        <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-          <GiftedAvatar
-            avatarStyle={StyleSheet.flatten([styles[this.props.position].image, this.props.imageStyle[this.props.position]])}
-          />
-        </View>
-      );
+      isVisible = this.props.renderAvatarsForSameUser;
     }
 
     return (
       <View
         style={[styles[this.props.position].container, styles[this.props.position][computedStyle], this.props.containerStyle[this.props.position]]}>
-        {this.renderAvatar()}
+        {this.renderAvatar(isVisible)}
       </View>
     );
   }
@@ -79,6 +74,7 @@ const styles = {
 };
 
 Avatar.defaultProps = {
+  renderAvatarsForSameUser: false,
   renderAvatarOnTop: false,
   position: 'left',
   currentMessage: {
@@ -93,6 +89,7 @@ Avatar.defaultProps = {
 };
 
 Avatar.propTypes = {
+  renderAvatarsForSameUser: PropTypes.bool,
   renderAvatarOnTop: PropTypes.bool,
   position: PropTypes.oneOf(['left', 'right']),
   currentMessage: PropTypes.object,
