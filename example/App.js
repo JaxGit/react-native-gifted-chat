@@ -219,6 +219,8 @@ export default class Example extends React.Component {
         renderSystemMessage={this.renderSystemMessage}
         renderCustomView={this.renderCustomView}
         renderFooter={this.renderFooter}
+        renderAvatarsForSameUser
+        renderAvatarOnTop
       />
     );
   }
